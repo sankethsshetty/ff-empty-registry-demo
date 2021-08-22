@@ -7,6 +7,44 @@ const fcl = require("@onflow/fcl");
 
 module.exports = class DappScripts {
 
+	static registry_has_bridge() {
+		return fcl.script`
+				import RegistryService from 0x01cf0e2f2f715450
+				
+				// Checks to see if an account has an AuthNFT
+				
+				pub fun main(tenant: Address): Bool {
+				    let hasAuthNFT = getAccount(tenant).getCapability(RegistryService.AuthPublicPath)
+				                        .borrow<&RegistryService.AuthNFT{RegistryService.IAuthNFT}>()
+				
+				    if hasAuthNFT == nil {
+				        return false
+				    } else {
+				        return true
+				    }
+				}
+		`;
+	}
+
+	static registry_has_stone_tenant() {
+		return fcl.script`
+				import RegistryStoneContract from 0x01cf0e2f2f715450
+				
+				// Checks to see if an account has an Stone Tenant
+				
+				pub fun main(tenant: Address): Bool {
+				    let hasStoneTenant = getAccount(tenant).getCapability(RegistryStoneContract.TenantPublicPath)
+				                        .borrow<&RegistryStoneContract.Tenant>()
+				
+				    if hasStoneTenant == nil {
+				        return false
+				    } else {
+				        return true
+				    }
+				}
+		`;
+	}
+
 	static registry_has_auth_nft() {
 		return fcl.script`
 				import RegistryService from 0x01cf0e2f2f715450
@@ -18,6 +56,25 @@ module.exports = class DappScripts {
 				                        .borrow<&RegistryService.AuthNFT{RegistryService.IAuthNFT}>()
 				
 				    if hasAuthNFT == nil {
+				        return false
+				    } else {
+				        return true
+				    }
+				}
+		`;
+	}
+
+	static registry_has_wood_tenant() {
+		return fcl.script`
+				import RegistryWoodContract from 0x01cf0e2f2f715450
+				
+				// Checks to see if an account has an AuthNFT
+				
+				pub fun main(tenant: Address): Bool {
+				    let hasWoodTenant = getAccount(tenant).getCapability(RegistryWoodContract.TenantPublicPath)
+				                        .borrow<&RegistryWoodContract.Tenant>()
+				
+				    if hasWoodTenant == nil {
 				        return false
 				    } else {
 				        return true

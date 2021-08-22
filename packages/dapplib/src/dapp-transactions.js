@@ -7,6 +7,29 @@ const fcl = require("@onflow/fcl");
 
 module.exports = class DappTransactions {
 
+	static registry_receive_bridge() {
+		return fcl.transaction`
+				import ComposedBridgeContract from 0x01cf0e2f2f715450
+				
+				
+				transaction() {
+				
+				    prepare(signer: AuthAccount) {
+				        // if this account doesn't already have an AuthNFT...
+				        if signer.borrow<&ComposedBridgeContract.Bridge>(from: ComposedBridgeContract.BridgeStoragePath) == nil {
+				            // save a new AuthNFT to account storage
+				            signer.save(<-ComposedBridgeContract.mintBridge(), to: ComposedBridgeContract.BridgeStoragePath)
+				
+				            }
+				    }
+				
+				    execute {
+				
+				    }
+				}
+		`;
+	}
+
 	static registry_receive_auth_nft() {
 		return fcl.transaction`
 				import RegistryService from 0x01cf0e2f2f715450
@@ -39,9 +62,9 @@ module.exports = class DappTransactions {
 		`;
 	}
 
-	static registry_receive_stone_minter() {
+	static registry_receive_stone_tenant() {
 		return fcl.transaction`
-				import RegistrySampleContract from 0x01cf0e2f2f715450
+				import RegistryStoneContract from 0x01cf0e2f2f715450
 				import RegistryService from 0x01cf0e2f2f715450
 				
 				// This transaction allows any Tenant to receive a Tenant Resource from
@@ -69,7 +92,7 @@ module.exports = class DappTransactions {
 				      // If you add resource interfaces that Tenant must implement, you can
 				      // add those here and then uncomment the line below.
 				      // 
-				      // signer.link<&RegistrySampleContract.Tenant>(RegistrySampleContract.TenantPublicPath, target: RegistrySampleContract.TenantStoragePath)
+				      signer.link<&RegistryStoneContract.Tenant>(RegistryStoneContract.TenantPublicPath, target: RegistryStoneContract.TenantStoragePath)
 				    }
 				  }
 				
@@ -123,9 +146,9 @@ module.exports = class DappTransactions {
 		`;
 	}
 
-	static registry_receive_wood_minter() {
+	static registry_receive_wood_tenant() {
 		return fcl.transaction`
-				import RegistryWood from 0x01cf0e2f2f715450
+				import RegistryWoodContract from 0x01cf0e2f2f715450
 				import RegistryService from 0x01cf0e2f2f715450
 				
 				// This transaction allows any Tenant to receive a Tenant Resource from
@@ -153,7 +176,7 @@ module.exports = class DappTransactions {
 				      // If you add resource interfaces that Tenant must implement, you can
 				      // add those here and then uncomment the line below.
 				      // 
-				      // signer.link<&RegistrySampleContract.Tenant>(RegistrySampleContract.TenantPublicPath, target: RegistrySampleContract.TenantStoragePath)
+				      signer.link<&RegistryWoodContract.Tenant>(RegistryWoodContract.TenantPublicPath, target: RegistryWoodContract.TenantStoragePath)
 				    }
 				  }
 				

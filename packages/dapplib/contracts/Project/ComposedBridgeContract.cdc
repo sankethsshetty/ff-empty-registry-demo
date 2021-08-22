@@ -6,10 +6,15 @@ pub contract ComposedBridgeContract {
 
     // total number of bridges
     pub var totalBridges: UInt64
+    
+    // Named Paths for users to use
+    pub let BridgeStoragePath: StoragePath
+
 
 
     init() {
         self.totalBridges = 0
+        self.BridgeStoragePath = /storage/BridgeStoragePath
 
     }
 
@@ -18,15 +23,15 @@ pub contract ComposedBridgeContract {
     }
 
     // user demands a bridge.
-    pub fun mintBridge(/*recipient */): @Bridge{
+    pub fun mintBridge(): @Bridge{
         // dynamically mint
         self.totalBridges = self.totalBridges + 1
         
-        let woodTenant = self.account.borrow<&RegistryWoodContract.Tenant>(from: /storage/RegistryWoodTenant)! as &RegistryWoodContract.Tenant
-        let stoneTenant = self.account.borrow<&RegistryStoneContract.Tenant>(from: /storage/RegistryStoneTenant)! as &RegistryStoneContract.Tenant
+        let woodTenant = self.account.getCapability(RegistryWoodContract.TenantPublicPath).borrow<&RegistryWoodContract.Tenant>()! as &RegistryWoodContract.Tenant
+        let stoneTenant = self.account.getCapability(RegistryStoneContract.TenantPublicPath).borrow<&RegistryStoneContract.Tenant>()! as &RegistryStoneContract.Tenant
 
-        let woodMinterRef = self.account.borrow<&RegistryWoodContract.Tenant>(from: /storage/RegistryWoodTenant)!.getWoodRef() as &RegistryWoodContract.WoodMinter
-        let stoneMinterRef = self.account.borrow<&RegistryStoneContract.Tenant>(from: /storage/RegistryStoneTenant)!.getStoneRef() as &RegistryStoneContract.StoneMinter
+        let woodMinterRef = woodTenant.getWoodRef() as &RegistryWoodContract.WoodMinter
+        let stoneMinterRef = stoneTenant.getStoneRef() as &RegistryStoneContract.StoneMinter
 
         let wood <- woodMinterRef.mintWood(_tenant: woodTenant)
         let stone <- stoneMinterRef.mintStone(_tenant: stoneTenant)

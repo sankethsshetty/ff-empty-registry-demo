@@ -9,7 +9,7 @@ pub contract RegistryWoodContract: RegistryInterface {
     // of tenants they have for a specific RegistryContract.
     access(contract) var clientTenants: {Address: UInt64}
 
-    // Total Wood supply accross all the Tenants that want to manage their own wood.
+    // Total Wood supply across all the Tenants that want to manage their own wood.
     pub var totalWoodSupply : UInt64
 
     // Tenant

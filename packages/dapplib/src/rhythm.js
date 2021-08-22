@@ -48,7 +48,7 @@ const serviceWallet = {
 const dappConfigFile = path.join(__dirname, 'dapp-config.json');
 
 (async () => {
-	let accountCount = 2;
+	let accountCount = 3;
 	let keyCount = 2;
 	let dappConfig = null;
 	let pending = false;
